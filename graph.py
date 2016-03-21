@@ -26,7 +26,7 @@ class vertex:
     def set_pos(self, p):
         self.pos = p
 
-    def get_pos():
+    def get_pos(self):
         return self.pos
 
 class graph:
@@ -36,7 +36,7 @@ class graph:
     def add_vertex(self, v):
         self.vertex_list.append(vertex(v))
 
-    def add_edge(e):
+    def add_edge(self, e):
         self.edge_list.append(e)
         (v0, v1) = e
         v0.add_adj(v1)
