@@ -78,4 +78,8 @@ class graph:
     def get_vertex_list(self):
         return self.vertex_list
 
-
+    def get_vertex(self, val):
+        for v in self.vertex_list:
+            if v.get_val() == val:
+                return v
+        return None
