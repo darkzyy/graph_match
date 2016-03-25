@@ -54,11 +54,8 @@ class graph:
         for vit in self.vertex_list:
             if vit.val == v0:
                 vit.add_adj(v1)
-                vit.print_adj()
             if vit.val == v1:
                 vit.add_adj(v0)
-                vit.print_adj()
-        # print '------'
 
     def rm_vertex(self, v):
         for v0 in v.adj_list:
