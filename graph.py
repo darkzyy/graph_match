@@ -58,7 +58,7 @@ class graph:
             if vit.val == v1:
                 vit.add_adj(v0)
                 vit.print_adj()
-        print '------'
+        # print '------'
 
     def rm_vertex(self, v):
         for v0 in v.adj_list:
