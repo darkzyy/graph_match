@@ -37,6 +37,37 @@ def bipart(graph, v):
             bipart(graph, graph.get_vertex(val))
 
 
+def in_match(m, vertex):
+    for e in m:
+        if vertex in e:
+            return True
+    return False
+
+
+def dfs(graph, v, cur_match):
+    v.set_color('red')
+
+    if v.get_pos() == 'left':
+        for adj in v.get_adj():
+            if set([v, adj]) not in cur_match and graph.get_vertex(adj).get_color() != 'red':
+                if not in_match(cur_match, adj):
+                    return [adj, v.get_val()]
+                ret_list = dfs(graph, graph.get_vertex(adj), cur_match)
+                if ret_list:
+                    return ret_list.append(v.get_val())
+                else:
+                    return []
+    else: # right
+        for adj in v.get_adj():
+            if set([v, adj]) in cur_match and graph.get_vertex(adj).get_color() != 'red':
+                ret_list = dfs(graph, graph.get_vertex(adj), cur_match)
+                if ret_list:
+                    return ret_list.append(v.get_val())
+                else:
+                    return []
+
+
+
 def find_match(graph):
     left_set = set()
     right_set = set()
@@ -50,11 +81,17 @@ def find_match(graph):
     for v in graph.get_vertex_list():
         if v.get_pos() == 'left':
             left_set.add(v)
-        else:
-            right_set.add(v)
 
+    match = set()
+    '''
     for v in left_set:
-        print v.get_val()
+        graph.clean()
+        match = set()
+        print dfs(graph, v, match)
+        '''
+    while True:
+      
+
 
 
 

@@ -40,6 +40,10 @@ class vertex:
 class graph:
     vertex_list = []
     edge_list = []
+    
+    def clean(self):
+        for v in self.vertex_list:
+            v.set_color('')
 
     def add_vertex(self, v):
         self.vertex_list.append(vertex(v))
