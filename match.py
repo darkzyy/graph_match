@@ -55,24 +55,24 @@ def dfs(graph, v, cur_match):
                 ret_list = dfs(graph, graph.get_vertex(adj), cur_match)
                 if ret_list:
                     return ret_list.append(v.get_val())
-                else:
-                    return []
+        return []
     else: # right
         for adj in v.get_adj():
             if set([v, adj]) in cur_match and graph.get_vertex(adj).get_color() != 'red':
                 ret_list = dfs(graph, graph.get_vertex(adj), cur_match)
                 if ret_list:
                     return ret_list.append(v.get_val())
-                else:
-                    return []
+        return []
 
 
 
 def find_match(graph):
     left_set = set()
     right_set = set()
-    graph.get_vertex_list()[0].set_pos('left')
-    bipart(graph, graph.get_vertex_list()[0])
+    for vertex in graph.get_vertex_list():
+        if vertex.get_pos() == '':
+            vertex.set_pos('left')
+            bipart(graph, vertex)
 
     # print bipartite graph
     for v in graph.get_vertex_list():
@@ -82,17 +82,31 @@ def find_match(graph):
         if v.get_pos() == 'left':
             left_set.add(v)
 
-    match = set()
-    '''
-    for v in left_set:
-        graph.clean()
-        match = set()
-        print dfs(graph, v, match)
-        '''
+    match = []
+
     while True:
-      
+        left_vertex_amt = 0
+        none_amt = 0
+        for v in left_set:
+            left_vertex_amt += 1
+            graph.clean()
+            path_list = dfs(graph, v, match)
+            if path_list:
+                for i in range(0, len(path_list)-1):
+                    graph.get_vertex(path_list[i]).set_color('finish')
+                    if i%2 == 0:
+                        match.append(set([path_list[i], path_list[i+1]]))
+                    else:
+                        match.remove(set([path_list[i], path_list[i+1]]))
+                graph.get_vertex(path_list[len(path_list)-1]).set_color('finish')
+            else:
+                none_amt += 1
+        if left_vertex_amt == 0:
+            break
+        if none_amt == left_vertex_amt:
+            break
 
-
+    print match
 
 
 def test():
