@@ -46,22 +46,28 @@ def in_match(m, vertex):
 
 def dfs(graph, v, cur_match):
     v.set_color('red')
+    # print 'processing', v.get_val()
 
     if v.get_pos() == 'left':
         for adj in v.get_adj():
-            if set([v, adj]) not in cur_match and graph.get_vertex(adj).get_color() != 'red':
+            if set([v.get_val(), adj]) not in cur_match \
+               and graph.get_vertex(adj).get_color() != 'red':
                 if not in_match(cur_match, adj):
                     return [adj, v.get_val()]
                 ret_list = dfs(graph, graph.get_vertex(adj), cur_match)
                 if ret_list:
-                    return ret_list.append(v.get_val())
+                    ret_list.append(v.get_val())
+                    return ret_list
         return []
     else: # right
         for adj in v.get_adj():
-            if set([v, adj]) in cur_match and graph.get_vertex(adj).get_color() != 'red':
+            # print 'adj of', v.get_val(), ':', adj
+            if set([v.get_val(), adj]) in cur_match \
+               and graph.get_vertex(adj).get_color() != 'red':
                 ret_list = dfs(graph, graph.get_vertex(adj), cur_match)
                 if ret_list:
-                    return ret_list.append(v.get_val())
+                    ret_list.append(v.get_val())
+                    return ret_list
         return []
 
 
@@ -74,28 +80,33 @@ def find_match(graph):
             vertex.set_pos('left')
             bipart(graph, vertex)
 
-    # print bipartite graph
-    for v in graph.get_vertex_list():
-        print v.get_val(), v.get_pos()
 
     for v in graph.get_vertex_list():
         if v.get_pos() == 'left':
             left_set.add(v)
 
     match = []
+    saturated_set = set()
 
     while True:
         left_vertex_amt = 0
         none_amt = 0
         for v in left_set:
+            if v.get_val() in saturated_set:
+                continue
+            # print 'start from', v.get_val()
             left_vertex_amt += 1
             graph.clean()
             path_list = dfs(graph, v, match)
             if path_list:
+                # print path_list
+                # print match
                 for i in range(0, len(path_list)-1):
                     graph.get_vertex(path_list[i]).set_color('finish')
                     if i%2 == 0:
                         match.append(set([path_list[i], path_list[i+1]]))
+                        saturated_set.add(path_list[i])
+                        saturated_set.add(path_list[i + 1])
                     else:
                         match.remove(set([path_list[i], path_list[i+1]]))
                 graph.get_vertex(path_list[len(path_list)-1]).set_color('finish')
@@ -106,7 +117,15 @@ def find_match(graph):
         if none_amt == left_vertex_amt:
             break
 
-    print match
+    # print '-'*50
+    print len(match)
+    # print match
+    match_list = []
+    for st in match:
+        match_list.append(sorted(list(st)))
+    for item in sorted(match_list):
+        print item[0]+','+item[1]
+
 
 
 def test():
@@ -114,8 +133,6 @@ def test():
     find_match(g)
     # viz.viz(g, 'test.gv')
     
-    
-
 
 if __name__ == '__main__':
     test()
