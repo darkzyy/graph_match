@@ -13,8 +13,8 @@ def graph_input():
         if int(v0) == -1 and int(v1) == -1:
             break
         e = set([v0, v1])
-        vertex_set |= set(v0)
-        vertex_set |= set(v1)
+        vertex_set |= set([v0])
+        vertex_set |= set([v1])
         if e not in edge_list:
             edge_list.append(e)
     # print vertex_set
@@ -122,9 +122,10 @@ def find_match(graph):
     # print match
     match_list = []
     for st in match:
-        match_list.append(sorted(list(st)))
+        match_list.append((sorted(list(map(int, st)))))
+
     for item in sorted(match_list):
-        print item[0]+','+item[1]
+        print str(item[0])+','+str(item[1])
 
 
 
